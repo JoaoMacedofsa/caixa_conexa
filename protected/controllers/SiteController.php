@@ -97,14 +97,38 @@ class SiteController extends Controller{
 
                 $produtos = Products::model()->findAll();
                 $html = $this->renderPartial("table_h", array('produtos'=>$produtos), true, false);
+                $itens = array('name'=>$product->name, 'quantity'=>$qtd);
 
-                $data = array('stock'=>$stock, 'qtd'=>$qtd);
-                header('Content-Type: application/json');
-                echo CJSON::encode(array(
-                    'success'=>true,
-                    'data'=>$data,
-                    'html' =>$html
-                ));
+                $url_produto= "https://staging.conexa.app/index.php/api/v2/sale";
+                $headers = ['Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTgyODA1MDAsImp0aSI6IjRPMitQVUJFZ1BLY1BFTGtSYW10UWQ0QlRZemQzYVdha0NDMTBxS2g2Nzg9IiwiaXNzIjoic3RhZ2luZyIsIm5iZiI6MTc1ODI4MDUwMCwiZXhwIjoxNzU4MzA5MzAwLCJkYXRhIjp7ImlkIjoxNzMsInR5cGUiOiJhZG1pbiIsInBlcnNvbkN1c3RvbWVySWQiOm51bGx9fQ.Knm4dc9mQzgQUhoKvTcL1VqsPs6pcDlFKNx0kUCvqME',];
+                $data = array(
+                    "customerId"=> 30,
+                    "productId"=> $id,
+                    "quantity"=> $qtd
+                );
+                $jsonData = json_encode($data);
+                $curl = curl_init();
+
+                curl_setopt($curl, CURLOPT_URL, $url_produto);
+                curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonData);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+                $response = curl_exec($curl);
+
+                if (curl_error($curl)){
+                echo 'Error: '.curl_error($curl);
+                }else{
+                    curl_close($curl);
+                    $result = json_decode($response, true);
+                    header('Content-Type: application/json');
+                    echo CJSON::encode(array(
+                        'success'=>true,
+                        'html' =>$html,
+                        'result'=>$result,
+                        'itens'=>$itens
+                    ));
+                }
                 Yii::app()->end();
                 
                 
@@ -121,7 +145,10 @@ class SiteController extends Controller{
     public function actionTeste(){
         $product = Products::model()->findByPK(2145);
         echo $product->name;
-        #if($product->delete()){echo 'Produto deletado com sucesso';};
+        $newStock = 100;
+        $stock = $product->stock + $newStock;
+        $product->stock = $stock;
+        if($product->save()){echo ' Stock com sucesso';};
     }
     
     public function actionSiteTeste(){

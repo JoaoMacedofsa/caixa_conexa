@@ -25,7 +25,6 @@ $this->breadcrumbs=array(
 					if(response.success){
 						$("#productId").val(response.data.productId);
 						$("#name").val(response.data.name);
-						$("#description").val(response.data.description);
 						$("#price").val(response.data.price);
 						$("#Req-form")[0].reset();
 					}else{
@@ -46,8 +45,6 @@ $this->breadcrumbs=array(
 	<?php echo CHtml::textfield('Product[id]', $model->id, array('id'=>'productId'))?>
 	<?php echo CHtml::label('Name:', 'name')?>
 	<?php echo CHtml::textfield('Product[name]', $model->name, array('id'=>'name'))?>
-	<?php echo CHtml::label('Description:', 'description',array('id'=>'description'))?>
-	<?php echo CHtml::textfield('Product[description]', $model->description)?>
 	<?php echo CHtml::label('Price:', 'price')?>
 	<?php echo CHtml::textfield('Product[price]', $model->price, array('id'=>'price'))?>
 	<?php echo CHtml::label('Stock:', 'stock')?>

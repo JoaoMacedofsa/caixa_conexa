@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
     <?php
+        Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/style.css');
         Yii::app()->clientScript->registerCoreScript('jquery');
         Yii::app()->clientScript->registerCoreScript('yii');
     ?>
@@ -13,7 +14,7 @@
 
 <body>
 
-    <div id='mainmenu'>
+    <div class='container' id='mainmenu'>
         <?php $this->widget('zii.widgets.CMenu',array(
             'items'=>array(
                 array('label'=>'Home', 'url'=>array('/site/index')),

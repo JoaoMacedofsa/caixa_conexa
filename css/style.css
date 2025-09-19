@@ -1,0 +1,14 @@
+/* Theme palette */
+:root {
+    --color-dark: #3F0D12; /* Black bean */
+    --color-accent: #A71D31; /* Madder */
+    --color-bg: #F1F0CC; /* Lemon chiffon */
+    --color-mid: #D5BF86; /* Ecru */
+    --color-neutral: #8D775F; /* Chamoisee */
+    --color-white: #ffffff;
+}
+
+body{
+    background-color: lemonchiffon;
+     /*background-color: var(--color-bg);*/
+}
