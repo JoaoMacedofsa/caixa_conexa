@@ -1,11 +1,11 @@
-<table>
+<table class='table'>
 	<thead>
 		<tr>
-			<th>id|</th>
-			<th>|name|</th>
-			<th>|price|</th>
-			<th>|stock|</th>
-			<th>|Modificações|</th>
+			<th>id</th>
+			<th>name</th>
+			<th>price</th>
+			<th>stock</th>
+			<th>Modificações</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -13,9 +13,9 @@
 		foreach ($products->findAll() as $product):?>
 		<tr>
 			<td><?php echo $product->id;?></td>
-			<td>|<?php echo $product->name;?></td>
-			<td>|<?php echo $product->price;?></td>
-			<td>|<?php echo $product->stock;?></td>
+			<td><?php echo $product->name;?></td>
+			<td><?php echo "R$".$product->price;?></td>
+			<td><?php echo $product->stock;?></td>
 			<td><?php 
 				echo CHtml::ajaxSubmitButton(
 					'Delete',

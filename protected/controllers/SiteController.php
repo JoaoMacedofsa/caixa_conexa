@@ -30,10 +30,10 @@ class SiteController extends Controller{
         if (isset($_POST['reqID'])){
             $reqID = $_POST['reqID'];
 
-            $url_produto= "https://staging.conexa.app/index.php/api/v2/product/$reqID";
+            $url_produto= "https://staging.conexa.app/index.php/api/v2/product/$reqID?fields=productId,name,price";
             $url_varios_produtos = 'https://staging.conexa.app/index.php/api/v2/products?companyId[]=3&isActive=1&size=5';
 
-            $headers = ['Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTgyODA1MDAsImp0aSI6IjRPMitQVUJFZ1BLY1BFTGtSYW10UWQ0QlRZemQzYVdha0NDMTBxS2g2Nzg9IiwiaXNzIjoic3RhZ2luZyIsIm5iZiI6MTc1ODI4MDUwMCwiZXhwIjoxNzU4MzA5MzAwLCJkYXRhIjp7ImlkIjoxNzMsInR5cGUiOiJhZG1pbiIsInBlcnNvbkN1c3RvbWVySWQiOm51bGx9fQ.Knm4dc9mQzgQUhoKvTcL1VqsPs6pcDlFKNx0kUCvqME',];
+            $headers = ['Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTg3OTg1NTcsImp0aSI6IjEwTS9MZTBXa0VteURoamIvNzhUNko3UHdNcVJMcTI2R0trdlpIRFlzR2c9IiwiaXNzIjoic3RhZ2luZyIsIm5iZiI6MTc1ODc5ODU1NywiZXhwIjoxNzU4ODI3MzU3LCJkYXRhIjp7ImlkIjoxNzMsInR5cGUiOiJhZG1pbiIsInBlcnNvbkN1c3RvbWVySWQiOm51bGx9fQ.bv_f3Cm4QSI98z5J2H6-msHNHLo3BwAwGx-KfPcGsyY',];
             
             $curl = curl_init();
 
@@ -45,22 +45,26 @@ class SiteController extends Controller{
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
             $response = curl_exec($curl);
-            
-
+            $result = json_decode($response, true);
             if (curl_error($curl)){
                 echo 'Error: '.curl_error($curl);
+            }
+            if(!$result['productId']){
+                header('Content-Type: application/json');
+                echo CJSON::encode(array(
+                    'success'=> false,
+                    'error' => 'Requisicao Invalida',
+                ));
+                Yii::app()->end();  
             }else{
                 curl_close($curl);
-                $result = json_decode($response, true);
 
                 if ($result === null){
                     echo 'Failed to decode JSON response';
-
                 }else{
                     $data = array(
                     'productId' => $result['productId'] ? $result['productId']:'',
                     'name' => $result['name'] ? $result['name']:'',
-                    'description' => $result['description'] ? $result['descritpion']: '',
                     'price' => $result['price'] ? $result['price']: '',
                     );
                     header('Content-Type: application/json');
@@ -94,7 +98,7 @@ class SiteController extends Controller{
                 $newStock = $stock - $qtd;
                 $product->stock = $newStock;
                 $product->save();
-
+                
                 $produtos = Products::model()->findAll();
                 $html = $this->renderPartial("table_h", array('produtos'=>$produtos), true, false);
                 $itens = array('name'=>$product->name, 'quantity'=>$qtd);
@@ -115,12 +119,22 @@ class SiteController extends Controller{
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
                 $response = curl_exec($curl);
+                $result = json_decode($response, true);
 
                 if (curl_error($curl)){
                 echo 'Error: '.curl_error($curl);
+                }
+                if(!$result['id']){
+                    $product->stock = $stock;
+                    header('Content-Type: application/json');
+                    echo CJSON::encode(array(
+                        'success'=> false,
+                        'error' => 'Requisicao Invalida',
+                    ));
+                    Yii::app()->end();  
                 }else{
+
                     curl_close($curl);
-                    $result = json_decode($response, true);
                     header('Content-Type: application/json');
                     echo CJSON::encode(array(
                         'success'=>true,
@@ -143,12 +157,13 @@ class SiteController extends Controller{
     }
 
     public function actionTeste(){
-        $product = Products::model()->findByPK(2145);
+        $product = Products::model()->findByPK(2146);
         echo $product->name;
-        $newStock = 100;
+        if($product->delete()){echo ' Deletado com sucesso';};
+        /*$newStock = 100;
         $stock = $product->stock + $newStock;
         $product->stock = $stock;
-        if($product->save()){echo ' Stock com sucesso';};
+        if($product->save()){echo ' Stock com sucesso';};*/
     }
     
     public function actionSiteTeste(){
