@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
     <?php
         Yii::app()->clientScript->registerCoreScript('jquery');
         Yii::app()->clientScript->registerCoreScript('yii');
+        Yii::app()->clientScript->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
         Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/style.css');
     ?>
     
@@ -14,7 +15,6 @@
 </head>
 
 <body>
-    
     <header class="app-header">
     	<h1 class="app-title"><?php echo CHtml::encode(Yii::app()->name); ?></h1>
     </header>
@@ -40,7 +40,8 @@
 
     <div class="clear"></div>
 
-     <!--<div id="footer">Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>All Rights Reserved.<br/></div>-->
+    <div id="footer">Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>All Rights Reserved.<br/></div>
     <!-- footer -->
+<?php Yii::app()->clientScript->registerScriptFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', CClientScript::POS_END); ?>
 </body>
 </html>

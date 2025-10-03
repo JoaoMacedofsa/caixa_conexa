@@ -16,24 +16,14 @@ class SiteController extends Controller{
         $this->render('painel');
     }
 
-    #Public function actionCreate(){
-        #$produto = Product::model()
-
-        #if (isset($_POST['Product'])){
-         #   $produto->attributes = $_POST['Product'];
-
-           # if ($produto->save()){
-                #Yii::app()->user->setFlash('success', 'Produto adicionao ao')
-    #}
-
     public function actionRequisicao(){
-        if (isset($_POST['reqID'])){
-            $reqID = $_POST['reqID'];
+        if (isset($_GET['reqID'])){
+            $reqID = $_GET['reqID'];
 
             $url_produto= "https://staging.conexa.app/index.php/api/v2/product/$reqID?fields=productId,name,price";
             $url_varios_produtos = 'https://staging.conexa.app/index.php/api/v2/products?companyId[]=3&isActive=1&size=5';
 
-            $headers = ['Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTg3OTg1NTcsImp0aSI6IjEwTS9MZTBXa0VteURoamIvNzhUNko3UHdNcVJMcTI2R0trdlpIRFlzR2c9IiwiaXNzIjoic3RhZ2luZyIsIm5iZiI6MTc1ODc5ODU1NywiZXhwIjoxNzU4ODI3MzU3LCJkYXRhIjp7ImlkIjoxNzMsInR5cGUiOiJhZG1pbiIsInBlcnNvbkN1c3RvbWVySWQiOm51bGx9fQ.bv_f3Cm4QSI98z5J2H6-msHNHLo3BwAwGx-KfPcGsyY',];
+            $headers = ['Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTk0OTE1MjUsImp0aSI6IldqREh0MDNRWjJ1bHRCaDh6L1hlaVBGcVFRTUFVdVEzTUNZOWFLSVhNQVU9IiwiaXNzIjoic3RhZ2luZyIsIm5iZiI6MTc1OTQ5MTUyNSwiZXhwIjoxNzU5NTIwMzI1LCJkYXRhIjp7ImlkIjoxNzMsInR5cGUiOiJhZG1pbiIsInBlcnNvbkN1c3RvbWVySWQiOm51bGx9fQ.6PbiVwt55yrc0h35UstiGlYbJU1jyDvnPDjqDbJ1pjk',];
             
             $curl = curl_init();
 
@@ -46,16 +36,19 @@ class SiteController extends Controller{
 
             $response = curl_exec($curl);
             $result = json_decode($response, true);
+
             if (curl_error($curl)){
                 echo 'Error: '.curl_error($curl);
             }
+
             if(!$result['productId']){
                 header('Content-Type: application/json');
                 echo CJSON::encode(array(
                     'success'=> false,
                     'error' => 'Requisicao Invalida',
                 ));
-                Yii::app()->end();  
+                Yii::app()->end();
+
             }else{
                 curl_close($curl);
 
@@ -73,10 +66,10 @@ class SiteController extends Controller{
                         'data' => $data,
                     ));
                     
-                    Yii::app()->end();  
-                   #$this->render('painel', array('result'=> $result));
+                    Yii::app()->end();
                 }
             };
+            
         }else{
             header('Content-Type: application/json');
                 echo CJSON::encode(array(
@@ -99,12 +92,13 @@ class SiteController extends Controller{
                 $product->stock = $newStock;
                 $product->save();
                 
+                
                 $produtos = Products::model()->findAll();
                 $html = $this->renderPartial("table_h", array('produtos'=>$produtos), true, false);
                 $itens = array('name'=>$product->name, 'quantity'=>$qtd);
 
                 $url_produto= "https://staging.conexa.app/index.php/api/v2/sale";
-                $headers = ['Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTgyODA1MDAsImp0aSI6IjRPMitQVUJFZ1BLY1BFTGtSYW10UWQ0QlRZemQzYVdha0NDMTBxS2g2Nzg9IiwiaXNzIjoic3RhZ2luZyIsIm5iZiI6MTc1ODI4MDUwMCwiZXhwIjoxNzU4MzA5MzAwLCJkYXRhIjp7ImlkIjoxNzMsInR5cGUiOiJhZG1pbiIsInBlcnNvbkN1c3RvbWVySWQiOm51bGx9fQ.Knm4dc9mQzgQUhoKvTcL1VqsPs6pcDlFKNx0kUCvqME',];
+                $headers = ['Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NTk0MDY5MDUsImp0aSI6IkxhMk1VdFhtY2lHN0FGQ1h2c0JOZGhVZXNZTWhLbGJrbGdLVUpsd2VrRkU9IiwiaXNzIjoic3RhZ2luZyIsIm5iZiI6MTc1OTQwNjkwNSwiZXhwIjoxNzU5NDM1NzA1LCJkYXRhIjp7ImlkIjoxNzMsInR5cGUiOiJhZG1pbiIsInBlcnNvbkN1c3RvbWVySWQiOm51bGx9fQ.5H_37plxWCSbL9yEpy9S4u6fDPH6Ip75qZloHiGDjV8',];
                 $data = array(
                     "customerId"=> 30,
                     "productId"=> $id,
@@ -126,6 +120,7 @@ class SiteController extends Controller{
                 }
                 if(!$result['id']){
                     $product->stock = $stock;
+                    $product->save();
                     header('Content-Type: application/json');
                     echo CJSON::encode(array(
                         'success'=> false,
@@ -165,17 +160,6 @@ class SiteController extends Controller{
         $product->stock = $stock;
         if($product->save()){echo ' Stock com sucesso';};*/
     }
-    
-    public function actionSiteTeste(){
-        $product = new Products;
-        $product->id = 2;
-        $product->name = 'borracha';
-        $product->price = 20.50;
-        $product->stock = 5;
-        $product->save();
-
-        echo 'Produto adicionado com sucesso';
-    }
 
     public function actionCreate(){
         $product = new Products;
@@ -185,7 +169,6 @@ class SiteController extends Controller{
 
                 $produtos = Products::model()->findAll();
                 $html = $this->renderPartial("table_p", array('produtos'=>$produtos), true);
-
                 
                 header('Content-Type: application/json');
                 echo CJSON::encode(array(
@@ -201,7 +184,7 @@ class SiteController extends Controller{
         if(isset($_POST['id'])){
             $id = (int)$_POST['id'];
             $product = Products::model()->findByPK($id);
-            
+
             if($product !== null){
                 if($product->delete()){
                     $produtos = Products::model()->findAll();
@@ -216,9 +199,8 @@ class SiteController extends Controller{
                 }
             }
             header('Content-Type: application/json');
-            echo CJSON::encode(array('success'=>false,'error'=> "Ocorreu um erro ao tentar deletar"));
+            echo CJSON::encode(array('success'=>false,'error'=> "Produto não existe"));
             Yii::app()->end();
         }
     }
-
 }

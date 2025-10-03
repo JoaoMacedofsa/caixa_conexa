@@ -14,34 +14,34 @@ $this->breadcrumbs=array(
 	<h2>Nova Requisicao</h2>
 	<hr>
 	<div class="form-row">
-	<?php echo CHtml::beginForm(array('site/requisicao'), 'post', array('id'=>'Req-form')) ?>
-		<?php echo CHtml::label('ID:', 'reqID')?>
-		<?php echo CHtml::textfield('reqID','', array('id'=>'reqID'))?>
-		<?php
-			echo CHtml::ajaxSubmitButton(
-				'Buscar na API',
-				array('site/requisicao'),
-				array(
-					'type'=> 'POST',
-					'dataType'=> 'json',
-					'success' => 'function(response){
-						if(response.success){
-							$("#productId").val(response.data.productId);
-							$("#name").val(response.data.name);
-							$("#price").val(response.data.price);
-							$("#Req-form")[0].reset;
-						}else{
-							alert("Erro: " + response.error);
-						}
-					}',
-					'error'=>'function() {
-						alert("Erro na comunicação com a API.");
-					}',
-				),
-				array('id'=> 'btnReq'),
-			);
-		?>
-	<?php echo CHtml::endForm();?>
+		<?php echo CHtml::beginForm(array('site/requisicao'), 'get', array('id'=>'Req-form')) ?>
+			<?php echo CHtml::label('ID:', 'reqID')?>
+			<?php echo CHtml::textfield('reqID','', array('id'=>'reqID'))?>
+			<?php
+				echo CHtml::ajaxButton(
+					'Buscar na API',
+					array('site/requisicao'),
+					array(
+						'type'=> 'GET',
+						'dataType'=> 'json',
+						'success' => 'function(response){
+							if(response.success){
+								$("#productId").val(response.data.productId);
+								$("#name").val(response.data.name);
+								$("#price").val(response.data.price);
+								$("#Req-form").find("#reqID").val("");
+							}else{
+								alert("Erro: " + response.error);
+							}
+						}',
+						'error'=>'function() {
+							alert("Erro na comunicação com a API.");
+						}',
+					),
+					array('class' => 'btn', 'id'=> 'btnReq'),
+				);
+			?>
+		<?php echo CHtml::endForm();?>
 	</div>
 </div>
 
@@ -69,7 +69,7 @@ $this->breadcrumbs=array(
 
 	<div class= "form-row">	
 		<?php echo CHtml::label('Stock:', 'stock')?>
-		<?php echo CHtml::textfield('Product[stock]', '')?>
+		<?php echo CHtml::textfield('Product[stock]', '', array('id'=>'stock'))?>
 	</div>
 
 	<hr>	
@@ -83,7 +83,7 @@ $this->breadcrumbs=array(
 				'success'=>'function(response){
 					if(response.success){
 						alert("Sucesso! Produto adicionado ao banco de dados")
-						$("#add-form")[0].reset;
+						$("#add-form").find("#productId,#name, #price, #stock").val("");
 						$("#itens_table").html(response.html);
 					}else{
 						alert("Erro:"+response.error);
@@ -93,7 +93,7 @@ $this->breadcrumbs=array(
 					alert("Erro na comunicação com o banco de dados.");
 				}',
 			),
-			array('id'=>'btnAdd'),
+			array('class' => 'btn', 'id'=>'btnAdd', 'onclick'=>"setTimeout(function(){ window.location.reload(); }, 100)"),
 		);
 	?>
 
@@ -104,6 +104,6 @@ $this->breadcrumbs=array(
 
 <div class='container' id='itens_table'>
 	<?php
-		include('table_p.php');
+		$html = $this->renderPartial("table_p");
 	?>
 </div>

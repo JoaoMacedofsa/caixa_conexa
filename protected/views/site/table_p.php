@@ -1,4 +1,5 @@
-<table class='table'>
+<div class="table-responsive">
+<table class='table table-hover align-middle table-sm'>
 	<thead>
 		<tr>
 			<th>id</th>
@@ -16,7 +17,7 @@
 			<td><?php echo $product->name;?></td>
 			<td><?php echo "R$".$product->price;?></td>
 			<td><?php echo $product->stock;?></td>
-			<td><?php 
+			<td><?php $btnDelete = 'delete_' . $product->id;
 				echo CHtml::ajaxSubmitButton(
 					'Delete',
 					array('site/delete'),
@@ -36,9 +37,11 @@
 							alert("Erro na comunicação com o banco de dados.");
 						}',
 					),
+					array('class' => 'btnDelete', 'id'=>$btnDelete)
 				);
 	?></td>
 		</tr>
 		<?php endforeach; ?>
 	</tbody>
 </table>
+</div>
