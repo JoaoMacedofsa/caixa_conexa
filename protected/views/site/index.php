@@ -2,13 +2,10 @@
 $this->pageTitle=Yii::app()->name. ' - Home';
 ?>
 
-<h1> Welcome to <i><?php echo CHtml::encode(Yii::app()->name);?></i></h1>
+<h1>Welcome</h1>
 
 <p> Itens disponiveis para compra</p>
-<?php # Aqui usarei um for do php para exibir os produtos do db ?>
 
-<div class='container' id='home_table'>
-    <?php
-        include("table_h.php");
-    ?>
+<div class='container-fluid text-center' id='home_table'>
+    <?php $this->renderPartial('_products_page', array('dataProvider' => $dataProvider)); ?>
 </div>

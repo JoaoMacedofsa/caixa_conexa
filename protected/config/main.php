@@ -11,9 +11,5 @@ return array(
 
 	'components'=>array(
 		'db'=>require(dirname(__FILE__).'/database.php'),
-		#'db'=>array(
-			#'class'=>'system.db.CDbConnection',
-			#'connectionString'  => 'sqlite:'.dirname(__FILE__).'/../data/caixa.db',
-		#),
 	),
 );

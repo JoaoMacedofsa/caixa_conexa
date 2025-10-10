@@ -1,17 +1,60 @@
 <?php
-/*
-Aqui será o painel do admin, onde os intens serão adicionados e dado uma quantidade no estoque
-*/
 $this->pageTitle=Yii::app()->name. ' - Painel';
 $this->breadcrumbs=array(
-	'painel',
+	'Painel',
 );
-
 ?>
 
 <h1>Painel de Configuração</h1>
-<div class='container-form' id='Req-form'>
-	<h2>Nova Requisicao</h2>
+
+<br>
+
+<div class='container-form'>
+<?php echo CHtml::beginForm(array('site/requisicao'), 'post', array('id'=>'token-form')) ?>
+		<h2>Pegar o token</h2>
+	<hr>
+
+	<div class= "form-row">
+		<?php echo CHtml::label('Username:', 'username')?>
+		<?php echo CHtml::textfield('username', '', array('id'=>'username'))?>
+	</div>
+
+	<div class= "form-row">
+		<?php echo CHtml::label('Password:', 'password')?>
+		<?php echo CHtml::passwordfield('password', '', array('id'=>'password'))?>
+	</div>
+
+	<hr>	
+	<?php
+		echo CHtml::ajaxSubmitButton(
+			'Pegar token',
+			array('site/requisicao'),
+			array(
+				'type'=>'POST',
+				'dataType'=>'json',
+				'success'=>'function(response){
+					if(response.success){
+						alert("Sucesso! Token atualizado" + " token: " + response.token);
+						$("#token-form")[0].reset();
+					}else{
+						alert("Erro:"+response.error);
+					}
+				}',
+				'error'=>'function(){
+					alert("Erro ao enviar os dados.");
+				}',
+			),
+			array('id'=>'btnToken'),
+		);
+	?>
+
+<?php echo CHtml::endForm();?>
+</div>
+
+<br><br>
+
+<div class='container-form'>
+	<h2>Buscar Produto</h2>
 	<hr>
 	<div class="form-row">
 		<?php echo CHtml::beginForm(array('site/requisicao'), 'get', array('id'=>'Req-form')) ?>
@@ -38,7 +81,7 @@ $this->breadcrumbs=array(
 							alert("Erro na comunicação com a API.");
 						}',
 					),
-					array('class' => 'btn', 'id'=> 'btnReq'),
+					array('id'=> 'btnReq'),
 				);
 			?>
 		<?php echo CHtml::endForm();?>
@@ -47,14 +90,14 @@ $this->breadcrumbs=array(
 
 <br><br>
 
-<div class='container-form' id='add-form'>
+<div class='container-form'>
 <?php echo CHtml::beginForm(array('site/create'), 'post', array('id'=>'add-form')) ?>
 		<h2>Registrar um novo Produto</h2>
 	<hr>
 
 	<div class= "form-row">
-		<?php echo CHtml::label('ID:', 'id')?>
-		<?php echo CHtml::textfield('Product[id]', '', array('id'=>'productId'))?>
+		<?php echo CHtml::label('productId:', 'productId')?>
+		<?php echo CHtml::textfield('Product[productId]', '', array('id'=>'productId'))?>
 	</div>
 
 	<div class= "form-row">
@@ -75,7 +118,7 @@ $this->breadcrumbs=array(
 	<hr>	
 	<?php
 		echo CHtml::ajaxSubmitButton(
-			'Adicionar ao Banco de dados',
+			'Adicionar ao Banco de Dados',
 			array('site/create'),
 			array(
 				'type'=>'POST',
@@ -93,7 +136,7 @@ $this->breadcrumbs=array(
 					alert("Erro na comunicação com o banco de dados.");
 				}',
 			),
-			array('class' => 'btn', 'id'=>'btnAdd', 'onclick'=>"setTimeout(function(){ window.location.reload(); }, 100)"),
+			array('id'=>'btnAdd', 'onclick'=>"setTimeout(function(){ window.location.reload(); }, 100)"),
 		);
 	?>
 

@@ -32,6 +32,8 @@ h1, h2{
     border-radius: 10px;
     padding: 16px;
     box-shadow: 0 6px 18px rgba(63, 13, 18, 0.08);
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .container-form {
@@ -55,13 +57,18 @@ h1, h2{
 
 /* Header */
 .app-header {
+    display: flex;
     background: var(--color-mid);
-    border-bottom: 1px solid var(--color-neutral);
     padding: 12px 20px;
+    align-items: baseline;
 }
 .app-title {
-    margin: 0;
+    margin-right: 0;
     font-size: 20px;
+}
+#logo{
+    width: 30px;
+    height: 30px;
 }
 
 /* Menu */
@@ -71,34 +78,20 @@ h1, h2{
     padding: 0px 0px 0px 0px;
     border-radius: 0px;
     box-shadow: none;
-    
 }
 #mainmenu ul li{
-    display: inline; 
+    display: inline;
+    padding: 5px; 
 }
 #mainmenu ul li a {
     color: var(--color-accent);
     text-decoration: none; 
 }
 #mainmenu ul li a:hover {
-    color: var(--color-dark);
-    text-decoration: underline; 
+   color: var(--color-dark);
 }
 
 /* Tables */
-/*#itens_table{
-    width: 50%;
-    margin: 0px;
-    padding: 0px;
-    border-radius: 5px;
-    overflow-x: auto;
-}
-#itens_table.container {
-    width: 100%;
-    padding: 0px;
-    margin: 0px
-}*/
-
 table {
     width: 100%;
     border-collapse: collapse;
@@ -132,7 +125,7 @@ label {
     font-size: 20px;
 }
 
-input[type="text"], input[type="number"] {
+input[type="text"], input[type="number"], input[type="password"] {
     background: var(--color-mid);
     background-color: #f0efdd;
     color: var(--color-dark);
@@ -154,6 +147,10 @@ input[type="text"], input[type="number"] {
     background: #fafaf0;  
 }
 
+#token-form input[type="text"], input[type="password"]{
+    align-self: center;
+    margin-left: 50px;
+}
 
 #Req-form label{
     width: 100px;
@@ -178,7 +175,6 @@ input[type="text"], input[type="number"] {
     width: 30px;
 }
 #add-form input[type="text"]{
-    align-self: self-start;
     margin-left: 250px;
     box-sizing: border-box; 
 }
@@ -187,13 +183,13 @@ input[type="text"], input[type="number"] {
     padding: 10px 10px 10px 10px;
 }
 
-input[type="text"]:focus, input[type="number"]:focus {
+input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus {
     outline: 2px solid var(--color-accent);
     border-color: var(--color-accent);
 }
 
 /* Buttons */
-input[type="submit"], .btn, .btnDelete, .btnBuy, #btnAdd, #btnBuy, #btnReq {
+input[type="submit"], .btn, .btnDelete, .btnBuy, #btnAdd, #btnReq {
     background: var(--color-accent);
     color: var(--color-white);
     border: none;
@@ -201,7 +197,8 @@ input[type="submit"], .btn, .btnDelete, .btnBuy, #btnAdd, #btnBuy, #btnReq {
     padding: 10px 14px;
     cursor: pointer;
     white-space: normal;   
-    overflow-wrap: break-word; 
+    overflow-wrap: break-word;
+
 }
 input[type="submit"]:hover, .btn:hover, .btnDelete:hover, .btnBuy:hover, #btnAdd:hover, #btnReq:hover {
     background: #9c1b2e;
@@ -247,7 +244,7 @@ input[type="submit"]:hover, .btn:hover, .btnDelete:hover, .btnBuy:hover, #btnAdd
     padding: 0px;
 }
 
-#product-grid {
+.product-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 40px;
@@ -310,18 +307,17 @@ input[type="submit"]:hover, .btn:hover, .btnDelete:hover, .btnBuy:hover, #btnAdd
     width:100%;
 }
 
-/* .product-card__qty{
-    max-width: 30%;
-}*/
-
 #btnBuy{
     align-self: end;
 }
 
-@media (max-width: 750px) {                 /* Aplica as regras só quando a largura da tela for menor ou igual a 800px (tablet/celular) */
+@media (max-width: 750px) {                
     #add-form .form-row {                   
         flex-direction: column;            
         flex-wrap: wrap;
+    }
+    #token-form input[type='text'],input[type='password'] { 
+        margin-left: 0px;   
     }
 
     label {                 
@@ -333,7 +329,8 @@ input[type="submit"]:hover, .btn:hover, .btnDelete:hover, .btnBuy:hover, #btnAdd
     }
 
     input[type="text"],           
-    input[type="number"] {        
+    input[type="number"],
+    input[type='password'] {        
         width: 100%;                        
     }
 
@@ -362,7 +359,7 @@ input[type="submit"]:hover, .btn:hover, .btnDelete:hover, .btnBuy:hover, #btnAdd
         top: 5px;
     }
 
-    #product-grid {
+    .product-grid {
     grid-template-columns: repeat(1, 1fr);
     gap: 40px;
     }

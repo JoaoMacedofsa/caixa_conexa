@@ -10,23 +10,25 @@
         Yii::app()->clientScript->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
         Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/style.css');
     ?>
-    
+    <link rel="icon" href="<?php echo Yii::app()->baseUrl; ?>/imgs/favicon.ico" type="image/x-icon">
 
 </head>
 
 <body>
-    <header class="app-header">
-    	<h1 class="app-title"><?php echo CHtml::encode(Yii::app()->name); ?></h1>
-    </header>
-
-    <div class='container' id='mainmenu'>
-        <?php $this->widget('zii.widgets.CMenu',array(
-            'items'=>array(
-                array('label'=>'Home', 'url'=>array('/site/index')),
-                array('label'=>'Painel', 'url'=>array('/site/painel')) 
-            ),
-        ));?>
-    </div><!-- menu -->
+        <div class="app-header" id='mainmenu'>
+    	    <div class="app-title">
+                <img src=imgs/logo.png alt='Logo do projeto' id='logo'>
+                <?php echo CHtml::encode(Yii::app()->name); ?>
+            </div>
+            <nav class="nav">    
+                <?php $this->widget('zii.widgets.CMenu',array(
+                    'items'=>array(
+                        array('label'=>'Home', 'url'=>array('/site/index')),
+                        array('label'=>'Painel', 'url'=>array('/site/painel')) 
+                    ),
+                ));?>
+            </nav>
+        </div>
     
     <?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
